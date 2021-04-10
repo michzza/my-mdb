@@ -13,7 +13,9 @@ cur.execute("""CREATE TABLE IF NOT EXISTS titles (
     start_year INTEGER,
     end_year INTEGER,
     runtime_minutes INTEGER,
-    genres STRING
+    genres STRING,
+    average_rating FLOAT,
+    num_votes INTEGER
     );""")
 
 con.commit()
@@ -28,6 +30,17 @@ with open('data/title.basics.tsv') as datafile:
                 VALUES (?,?,?,?,?,?,?,?,?);""", clean_row)
         except:
             print(row)
+
+con.commit()
+
+with open('data/title.ratings.tsv') as datafile:
+    data = csv.reader(datafile, delimiter="\t", quotechar=None)
+    
+    for row in data:
+        clean_row = [None if item == r'\N' else item for item in row]
+        cur.execute("""UPDATE titles
+                SET average_rating = ?, num_votes = ?
+                WHERE id = ?;""", [row[1], row[2], row[0]])
 
 con.commit()
 
