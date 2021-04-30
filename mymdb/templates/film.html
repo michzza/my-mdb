@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Mymdb Film</h1>
+    <ul>
+        {% for key in result.keys() %}
+            <li>{{key}}:{{result[key]}}</li>
+        {% endfor %}
+     
+    </ul>
+{% endblock %}
